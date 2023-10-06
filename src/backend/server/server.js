@@ -19,6 +19,9 @@ app.post('/upload-photo', photoController.uploadPhotoAndCreateEntry);
 
 app.post('/login-user', userController.loginUser);
 
+// New route to fetch the last 10 photos
+app.get('/get-last-ten-photos', photoController.getLastTenPhotos);
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });

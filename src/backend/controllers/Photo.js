@@ -35,3 +35,27 @@ exports.uploadPhotoAndCreateEntry = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.getLastTenPhotos = async (req, res) => {
+  try {
+    const photos = await Photo.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+    });
+
+    const photosWithBase64 = photos.map((photo) => {
+      const imageBuffer = photo.imageData; // imageData is binary data
+      const base64Image = imageBuffer.toString('base64');
+      return {
+        id: photo.id,
+        // Add other properties as needed
+        imageData: `data:image/jpeg;base64,${base64Image}`, // Update with the correct image format
+      };
+    });
+
+    res.json(photosWithBase64);
+  } catch (error) {
+    console.error('Error fetching photos:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
