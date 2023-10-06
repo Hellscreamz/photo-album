@@ -1,4 +1,4 @@
-const { Photo } = require('../models');
+const { Photo, Comment } = require('../models');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -90,6 +90,59 @@ exports.getAllPictures = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching pictures:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.deletePhoto = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+    const photoId = req.params.photoId;
+
+    const photo = await Photo.findOne({ where: { id: photoId } });
+
+    if (!photo) {
+      return res.status(404).json({ error: 'Photo not found' });
+    }
+
+    if (photo.userId !== userId) {
+      return res.status(403).json({ error: 'You do not have permission to delete this photo' });
+    }
+
+    await photo.destroy();
+
+    res.status(204).send();
+  } catch (error) {
+    console.error('Error deleting photo:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+exports.submitComment = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+    const photoId = req.params.photoId;
+    const commentText = req.body.commentText;
+
+    const photo = await Photo.findOne({ where: { id: photoId } });
+
+    if (!photo) {
+      return res.status(404).json({ error: 'Photo not found' });
+    }
+
+    const comment = await Comment.create({
+      userId,
+      photoId,
+      text: commentText,
+    });
+
+    res.status(201).json({ message: 'Comment submitted successfully', comment });
+  } catch (error) {
+    console.error('Error submitting comment:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
