@@ -48,14 +48,48 @@ exports.getLastTenPhotos = async (req, res) => {
       const base64Image = imageBuffer.toString('base64');
       return {
         id: photo.id,
-        // Add other properties as needed
-        imageData: `data:image/jpeg;base64,${base64Image}`, // Update with the correct image format
+        imageData: `data:image/jpeg;base64,${base64Image}`,
       };
     });
 
     res.json(photosWithBase64);
   } catch (error) {
     console.error('Error fetching photos:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+exports.getAllPictures = async (req, res) => {
+  try {
+    const { page } = req.query;
+    const itemsPerPage = 10;
+    const offset = (page - 1) * itemsPerPage;
+
+    const { count, rows } = await Photo.findAndCountAll({
+      offset,
+      limit: itemsPerPage,
+      order: [['createdAt', 'DESC']],
+    });
+
+    const totalPages = Math.ceil(count / itemsPerPage);
+
+    const photosWithBase64 = rows.map((photo) => {
+      const imageBuffer = photo.imageData;
+      const base64Image = imageBuffer.toString('base64');
+      return {
+        id: photo.id,
+        // Add other properties as needed
+        imageData: `data:image/jpeg;base64,${base64Image}`,
+      };
+    });
+
+    res.status(200).json({
+      pictures: photosWithBase64,
+      totalPages,
+    });
+  } catch (error) {
+    console.error('Error fetching pictures:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

@@ -22,6 +22,9 @@ app.post('/login-user', userController.loginUser);
 // New route to fetch the last 10 photos
 app.get('/get-last-ten-photos', photoController.getLastTenPhotos);
 
+// New route to fetch all pictures with pagination
+app.get('/get-all-pictures', photoController.getAllPictures);
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
