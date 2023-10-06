@@ -6,11 +6,8 @@ const jwt = require('jsonwebtoken');
 
 exports.uploadPhotoAndCreateEntry = async (req, res) => {
   try {
-
     const token = req.headers.authorization.split(' ')[1]; // Assuming "Bearer" is part of the token value
-
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
     const userId = decodedToken.userId;
 
     const photoCount = await Photo.count({ where: { userId } });
@@ -18,8 +15,6 @@ exports.uploadPhotoAndCreateEntry = async (req, res) => {
     if (photoCount >= 10) {
       return res.status(400).json({ error: 'You have reached the maximum limit of 10 photos.' });
     }
-
-    const { title, description, place } = req.body;
 
     upload.single('photo')(req, res, async function (err) {
       if (err) {
@@ -29,9 +24,6 @@ exports.uploadPhotoAndCreateEntry = async (req, res) => {
       const imageData = req.file.buffer;
 
       const photo = await Photo.create({
-        title,
-        description,
-        place,
         userId,
         imageData,
       });
