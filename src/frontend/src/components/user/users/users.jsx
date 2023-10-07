@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Users.css';
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -25,12 +26,16 @@ function Users() {
   };
 
   return (
-    <div>
+    <div className="users-container">
       <h2>All Users</h2>
-      <ul>
+      <ul className="user-list">
         {users.map((user) => (
-          <li key={user.id}>
-            FIrst Name: {user.firstName}, Last Name: {user.lastName}
+          <li key={user.id} className="user-item">
+            <div className="user-info">
+              <span className="user-name">
+                {user.firstName} {user.lastName}
+              </span>
+            </div>
           </li>
         ))}
       </ul>
@@ -39,7 +44,7 @@ function Users() {
           <button
             key={index}
             onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? 'active' : ''}
+            className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
           >
             {index + 1}
           </button>

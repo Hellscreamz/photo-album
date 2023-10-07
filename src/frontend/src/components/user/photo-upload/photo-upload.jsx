@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { axiosWithAuth } from '../../../auth/auth';
+import './UploadPhoto.css'
+
 function PhotoUpload() {
   const [formData, setFormData] = useState({
     photo: null,
@@ -28,12 +30,10 @@ function PhotoUpload() {
 
       console.log('Photo uploaded successfully:', response.data);
 
-      // Reset the form
       setFormData({
         photo: null,
       });
 
-      // Clear the file input field using the ref
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -44,7 +44,7 @@ function PhotoUpload() {
   };
 
   return (
-    <div>
+    <div className="photo-upload-container"> {/* Apply the CSS class */}
       <h2>Upload a Photo</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -53,8 +53,9 @@ function PhotoUpload() {
           accept="image/*"
           onChange={handleFileChange}
           ref={fileInputRef}
+          className="photo-upload-input"
         />
-        <button type="submit">Upload</button>
+        <button type="submit" className="photo-upload-button">Upload</button> {/* Apply the CSS class */}
       </form>
     </div>
   );

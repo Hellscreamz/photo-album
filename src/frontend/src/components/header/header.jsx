@@ -3,7 +3,7 @@ import LastTenPhotos from '../last-uploaded-pics/last-uploaded-pics';
 import AllPictures from '../all-pictures/all-pictures';
 import Users from '../user/users/users';
 import ContactForm from '../contacts/send-message/send-message';
-
+import './Header.css'
 function HeaderMenu() {
   const [showLastTenPhotos, setShowLastTenPhotos] = useState(false);
   const [showAllPictures, setShowAllPictures] = useState(false);

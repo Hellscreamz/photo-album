@@ -1,0 +1,29 @@
+.admin-statistics-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+  }
+
+  .admin-statistics-error {
+    color: red;
+    font-weight: bold;
+  }
+
+  .admin-statistics-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .admin-statistics-list li {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #fff;
+  }
+
+  .admin-statistics-list-header {
+    font-weight: bold;
+  }

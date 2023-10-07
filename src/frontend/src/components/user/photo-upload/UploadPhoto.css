@@ -1,0 +1,26 @@
+.photo-upload-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+
+  .photo-upload-input {
+    margin: 10px 0;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .photo-upload-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .photo-upload-button:hover {
+    background-color: #0056b3;
+  }

@@ -1,0 +1,18 @@
+.user-profile-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: left;
+  }
+
+  .user-info-item {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .user-info-heading {
+    font-size: 20px;
+    font-weight: bold;
+  }

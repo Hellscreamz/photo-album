@@ -1,0 +1,36 @@
+.admin-registration-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+  }
+
+  .admin-registration-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-registration-form label {
+    font-weight: bold;
+  }
+
+  .admin-registration-form input {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  .admin-registration-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .admin-registration-form button:hover {
+    background-color: #1e7e34;
+  }

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import './LastUploadedPics.css'
 function LastTenPhotos() {
     const [photos, setPhotos] = useState([]);
 
@@ -22,7 +22,6 @@ function LastTenPhotos() {
           {photos.map((photo) => (
             <div key={photo.id} className="photo-item">
               <img src={photo.imageData} alt={`Photo ${photo.id}`} />
-              {/* Add other photo details as needed */}
             </div>
           ))}
         </div>

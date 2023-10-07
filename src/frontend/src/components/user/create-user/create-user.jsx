@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import UserProfile from '../user-profile/user-profile';
+import './CreateUser.css';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,6 @@ function Register() {
         },
       });
 
-
       console.log('User registered successfully:', response.data);
 
       setShowForm(false);
@@ -40,10 +40,10 @@ function Register() {
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h2>Register</h2>
       {showForm ? (
-        <form onSubmit={handleSubmit}>
+        <form className="register-form" onSubmit={handleSubmit}>
           <input
             type="text"
             name="firstName"
@@ -79,12 +79,12 @@ function Register() {
             value={formData.password}
             onChange={handleInputChange}
           />
-          <button type="submit">Register</button>
+          <button className="register-button" type="submit">Register</button>
         </form>
       ) : showUserInfo ? (
         <UserProfile user={formData} />
       ) : (
-        <button onClick={() => setShowForm(true)}>Register now</button>
+        <button className="register-button" onClick={() => setShowForm(true)}>Register now</button>
       )}
     </div>
   );

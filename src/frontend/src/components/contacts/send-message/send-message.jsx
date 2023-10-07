@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import './SendMessage.css'
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -39,7 +39,7 @@ const ContactForm = () => {
   };
 
   return (
-    <div>
+    <div className="contact-form-container"> {/* Add the container class */}
       <h2>Contact Us</h2>
       <form onSubmit={handleSubmit}>
         <div>

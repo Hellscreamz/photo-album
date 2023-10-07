@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { axiosWithAuth } from '../../auth/auth';
+import './AllPictures.css'
 
 function AllPictures({ loggedInUserId }) {
   const [photos, setPhotos] = useState([]);
@@ -15,7 +17,6 @@ function AllPictures({ loggedInUserId }) {
       setPhotos(response.data.pictures);
       setTotalPages(response.data.totalPages);
 
-      // Fetch comments for each photo
       const photoIds = response.data.pictures.map((photo) => photo.id);
       await fetchComments(photoIds);
     } catch (error) {
@@ -96,8 +97,8 @@ function AllPictures({ loggedInUserId }) {
                     e.target.comment.value = '';
                   }}
                 >
-                  <input type="text" name="comment" placeholder="Add a comment" />
-                  <button type="submit">Submit</button>
+                  <input type="text" name="comment" placeholder="Add a comment" className="comment-input" />
+                  <button type="submit" className="comment-submit">Submit</button>
                 </form>
                 <div className="comments">
                   {comments[photo.id] && comments[photo.id].length > 0 ? (
@@ -112,7 +113,7 @@ function AllPictures({ loggedInUserId }) {
                 </div>
               </div>
               {loggedInUserId === photo.userId && (
-                <button onClick={() => handleDeletePhoto(photo.id)}>Delete</button>
+                <button onClick={() => handleDeletePhoto(photo.id)} className="delete-button">Delete</button>
               )}
             </div>
           ))}

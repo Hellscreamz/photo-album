@@ -1,0 +1,51 @@
+.users-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .user-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .user-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #281279;
+  }
+
+  .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .user-name {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .page-button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .page-button.active {
+    background-color: #007bff;
+    color: #fff;
+  }

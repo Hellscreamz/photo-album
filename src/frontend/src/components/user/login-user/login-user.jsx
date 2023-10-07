@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './LoginUser.css'
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -28,18 +29,21 @@ function Login() {
 
       localStorage.setItem('token', response.data.token);
 
+      // Hide the form after successful login
+      setShowForm(false);
+
     } catch (error) {
       console.error('Error logging in:', error);
     }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
       {!showForm ? (
-        <button onClick={() => setShowForm(true)}>Login</button>
+        <button className="login-button" onClick={() => setShowForm(true)}>Login</button>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit}>
           <input
             type="email"
             name="email"
@@ -54,7 +58,7 @@ function Login() {
             value={formData.password}
             onChange={handleInputChange}
           />
-          <button type="submit">Login</button>
+          <button className="login-button" type="submit">Login</button>
         </form>
       )}
     </div>

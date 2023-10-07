@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AdminRegistration.css';
 
 const AdminRegistration = () => {
   const [formData, setFormData] = useState({
@@ -38,9 +39,9 @@ const AdminRegistration = () => {
   };
 
   return (
-    <div>
+    <div className="admin-registration-container">
       <h3>Create Admin</h3>
-      <form onSubmit={handleSubmit}>
+      <form className="admin-registration-form" onSubmit={handleSubmit}>
         <div>
           <label>Username:</label>
           <input
