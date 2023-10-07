@@ -9,15 +9,6 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      title: {
-        type: Sequelize.STRING,
-      },
-      description: {
-        type: Sequelize.TEXT,
-      },
-      place: {
-        type: Sequelize.STRING,
-      },
       imageData: {
         type: Sequelize.BLOB('long'),
         allowNull: false,

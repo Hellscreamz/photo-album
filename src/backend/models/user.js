@@ -3,7 +3,13 @@ const { Model, DataTypes, UUIDV4 } = require('sequelize');
 
 module.exports = (sequelize) => {
   class User extends Model {
-    static associate(models) {}
+    static associate(models) {
+      User.hasMany(models.Photo, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+    }
   }
 
   User.init({

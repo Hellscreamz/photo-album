@@ -59,3 +59,32 @@ exports.loginUser = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.getAllUsersWithPagination = async (req, res) => {
+  try {
+    const { page } = req.query;
+    const itemsPerPage = 10;
+    const offset = (page - 1) * itemsPerPage;
+
+    const users = await User.findAll({
+      attributes: ['id', 'firstName', 'lastName'],
+      offset,
+      limit: itemsPerPage,
+    });
+
+    const totalUsers = await User.count();
+
+    const totalPages = Math.ceil(totalUsers / itemsPerPage);
+
+    res.status(200).json({
+      users,
+      totalPages,
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
