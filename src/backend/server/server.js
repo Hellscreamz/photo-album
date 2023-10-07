@@ -4,7 +4,7 @@ const cors = require('cors');
 const port = 3000;
 const userController = require('../controllers/User');
 const photoController = require('../controllers/Photo');
-
+const contactsController = require('../controllers/Contacts');
 const corsOptions = {
   origin: 'http://localhost:3001', // Replace with your frontend's URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -30,6 +30,8 @@ app.post('/submit-comment/:photoId', photoController.submitComment);
 app.get('/get-comments', photoController.getCommentsByPhotoIds);
 
 app.get('/get-users', userController.getAllUsersWithPagination);
+
+app.post('/send-message', contactsController.submitMessage);
 
 app.get('/', (req, res) => {
   res.send('Hello, World!');
