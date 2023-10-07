@@ -37,6 +37,8 @@ app.post('/send-message', contactsController.submitMessage);
 
 app.post('/create-admin', adminController.createAdmin);
 
+app.post('/admin-login', adminController.adminLogin);
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
