@@ -7,14 +7,43 @@ function AllPictures({ loggedInUserId }) {
   const [photos, setPhotos] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [comments, setComments] = useState({});
 
   const fetchPictures = async (page) => {
     try {
       const response = await axios.get(`http://localhost:3000/get-all-pictures?page=${page}`);
       setPhotos(response.data.pictures);
       setTotalPages(response.data.totalPages);
+
+      // Fetch comments for each photo
+      const photoIds = response.data.pictures.map((photo) => photo.id);
+      await fetchComments(photoIds);
     } catch (error) {
       console.error('Error fetching pictures:', error);
+    }
+  };
+
+  const fetchComments = async (photoIds) => {
+    try {
+      const commentsResponse = await axios.get(`http://localhost:3000/get-comments`, {
+        params: {
+          photoIds: photoIds.join(','),
+        },
+      });
+
+      // Organize comments by photo id
+      const commentsData = commentsResponse.data;
+      const commentsByPhotoId = {};
+      commentsData.forEach((comment) => {
+        const photoId = comment.photoId;
+        if (!commentsByPhotoId[photoId]) {
+          commentsByPhotoId[photoId] = [];
+        }
+        commentsByPhotoId[photoId].push(comment);
+      });
+      setComments(commentsByPhotoId);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
     }
   };
 
@@ -71,14 +100,17 @@ function AllPictures({ loggedInUserId }) {
                   <button type="submit">Submit</button>
                 </form>
                 <div className="comments">
-                  {photo.comments && photo.comments.map((comment) => (
-                    <div key={comment.id} className="comment">
-                      {comment.text}
-                    </div>
-                  ))}
+                  {comments[photo.id] && comments[photo.id].length > 0 ? (
+                    comments[photo.id].map((comment) => (
+                      <div key={comment.id} className="comment">
+                        {comment.text}
+                      </div>
+                    ))
+                  ) : (
+                    <p>No comments</p>
+                  )}
                 </div>
               </div>
-              {/* Show delete button if the viewer is the author */}
               {loggedInUserId === photo.userId && (
                 <button onClick={() => handleDeletePhoto(photo.id)}>Delete</button>
               )}

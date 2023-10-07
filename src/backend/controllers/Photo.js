@@ -59,7 +59,6 @@ exports.getLastTenPhotos = async (req, res) => {
   }
 };
 
-
 exports.getAllPictures = async (req, res) => {
   try {
     const { page } = req.query;
@@ -70,22 +69,26 @@ exports.getAllPictures = async (req, res) => {
       offset,
       limit: itemsPerPage,
       order: [['createdAt', 'DESC']],
+      include: [{ model: Comment }],
     });
 
     const totalPages = Math.ceil(count / itemsPerPage);
 
-    const photosWithBase64 = rows.map((photo) => {
+    const photosWithBase64AndComments = rows.map((photo) => {
       const imageBuffer = photo.imageData;
       const base64Image = imageBuffer.toString('base64');
       return {
         id: photo.id,
-        // Add other properties as needed
         imageData: `data:image/jpeg;base64,${base64Image}`,
+        comments: photo.Comments.map((comment) => ({
+          id: comment.id,
+          text: comment.text,
+        })),
       };
     });
 
     res.status(200).json({
-      pictures: photosWithBase64,
+      pictures: photosWithBase64AndComments,
       totalPages,
     });
   } catch (error) {
@@ -143,6 +146,24 @@ exports.submitComment = async (req, res) => {
     res.status(201).json({ message: 'Comment submitted successfully', comment });
   } catch (error) {
     console.error('Error submitting comment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+exports.getCommentsByPhotoIds = async (req, res) => {
+  try {
+    const { photoIds } = req.query;
+    const photoIdsArray = photoIds.split(',');
+
+    const comments = await Comment.findAll({
+      where: { photoId: photoIdsArray },
+      include: Photo,
+    });
+
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

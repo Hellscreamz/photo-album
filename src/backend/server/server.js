@@ -27,6 +27,8 @@ app.delete('/delete-photo/:photoId', photoController.deletePhoto);
 
 app.post('/submit-comment/:photoId', photoController.submitComment);
 
+app.get('/get-comments', photoController.getCommentsByPhotoIds);
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
