@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { axiosWithAuth } from '../../../../auth/auth';
-
+import { axiosWithAuth } from '../../../auth/auth';
 function PhotoUpload() {
   const [formData, setFormData] = useState({
     photo: null,

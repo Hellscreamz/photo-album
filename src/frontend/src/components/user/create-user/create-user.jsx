@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import UserProfile from './user-profile/user-profile';
+import UserProfile from '../user-profile/user-profile';
 
 function Register() {
   const [formData, setFormData] = useState({
