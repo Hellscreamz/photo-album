@@ -19,14 +19,17 @@ const AdminLogin = () => {
     e.preventDefault();
 
     try {
-
       const response = await axios.post('http://localhost:3000/admin-login', formData);
 
       if (response.status === 200) {
         const { token } = response.data;
-        localStorage.setItem('admin-token', response.data.token);
+        localStorage.setItem('token', response.data.token);
 
         console.log('Admin login successful. Token:', token);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         alert('Admin login failed');
       }

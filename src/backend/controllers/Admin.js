@@ -53,8 +53,25 @@ exports.adminLogin = async (req, res) => {
 
 exports.getAdminStatistics = async (req, res) => {
   try {
+
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decodedToken.isAdmin) {
+      return res.status(403).json({ error: 'Forbidden: Not an admin' });
+    }
+
     const last5Users = await User.findAll({ limit: 5, order: [['createdAt', 'DESC']] });
-    const last5Photos = await Photo.findAll({ limit: 5, order: [['createdAt', 'DESC']], include: User });
+    const last5Photos = await Photo.findAll({
+      limit: 5,
+      order: [['createdAt', 'DESC']],
+      include: User,
+    });
 
     res.json({ last5Users, last5Photos });
   } catch (error) {
@@ -62,4 +79,3 @@ exports.getAdminStatistics = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-

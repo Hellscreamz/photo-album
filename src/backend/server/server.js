@@ -39,6 +39,8 @@ app.post('/create-admin', adminController.createAdmin);
 
 app.post('/admin-login', adminController.adminLogin);
 
+app.get('/admin-statistics', adminController.getAdminStatistics);
+
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });

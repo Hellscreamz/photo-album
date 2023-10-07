@@ -7,7 +7,7 @@ import AdminPanel from './components/admin/admin-panel';
 function App() {
   return (
     <div className="App">
-      <h1>Welcome to Hell</h1>
+      <h1>Photo Organizer</h1>
       <HeaderMenu />
       <AdminPanel />
       <Register />
