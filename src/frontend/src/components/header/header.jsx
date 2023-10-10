@@ -1,59 +1,39 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
+
 import LastTenPhotos from '../last-uploaded-pics/last-uploaded-pics';
 import AllPictures from '../all-pictures/all-pictures';
 import Users from '../user/users/users';
 import ContactForm from '../contacts/send-message/send-message';
-import './Header.css'
+import './Header.css';
+
 function HeaderMenu() {
-  const [showLastTenPhotos, setShowLastTenPhotos] = useState(false);
-  const [showAllPictures, setShowAllPictures] = useState(false);
-  const [showAllUsers, setShowAllUsers] = useState(false);
-  const [showContactForm, setShowContactForm] = useState(false);
+  const [activeContent, setActiveContent] = useState(null);
 
-  const handleGetStartedClick = (e) => {
-    e.preventDefault();
-    setShowLastTenPhotos(true);
-    setShowAllPictures(false);
-    setShowAllUsers(false);
-    setShowContactForm(false);
-  };
-
-  const handlePicturesClick = (e) => {
-    e.preventDefault();
-    setShowLastTenPhotos(false);
-    setShowAllPictures(true);
-    setShowAllUsers(false);
-    setShowContactForm(false);
-  };
-
-  const handleUsersClick = (e) => {
-    e.preventDefault();
-    setShowLastTenPhotos(false);
-    setShowAllPictures(false);
-    setShowAllUsers(true);
-    setShowContactForm(false);
-  };
-
-  const handleContactFormClick = (e) => {
-    e.preventDefault();
-    setShowLastTenPhotos(false);
-    setShowAllPictures(false);
-    setShowAllUsers(false);
-    setShowContactForm(true);
+  const handleMenuItemClick = (contentName) => {
+    setActiveContent(contentName);
   };
 
   return (
     <header>
       <nav>
-        <a href="/" onClick={handleGetStartedClick}>Get Started</a>
-        <a href="/pictures" onClick={handlePicturesClick}>Pictures</a>
-        <a href="/users" onClick={handleUsersClick}>Users</a>
-        <a href="/contacts" onClick={handleContactFormClick}>Contacts</a>
+        <Link to='/' onClick={() => handleMenuItemClick('lastTenPhotos')}>
+          Get Started
+        </Link>
+        <Link to='/pictures' onClick={() => handleMenuItemClick('allPictures')}>
+          Pictures
+        </Link>
+        <Link to='/users' onClick={() => handleMenuItemClick('allUsers')}>
+          Users
+        </Link>
+        <Link to='/contacts' onClick={() => handleMenuItemClick('contactForm')}>
+          Contacts
+        </Link>
       </nav>
-      {showLastTenPhotos && <LastTenPhotos />}
-      {showAllPictures && <AllPictures />}
-      {showAllUsers && <Users />}
-      {showContactForm && <ContactForm />}
+      {activeContent === 'lastTenPhotos' && <LastTenPhotos />}
+      {activeContent === 'allPictures' && <AllPictures />}
+      {activeContent === 'allUsers' && <Users />}
+      {activeContent === 'contactForm' && <ContactForm />}
     </header>
   );
 }
