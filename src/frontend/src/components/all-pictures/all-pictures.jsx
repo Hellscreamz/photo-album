@@ -108,7 +108,7 @@ function AllPictures({ loggedInUserId }) {
                       </div>
                     ))
                   ) : (
-                    <p>No comments</p>
+                    <p className="no-comments">No comments</p>
                   )}
                 </div>
               </div>

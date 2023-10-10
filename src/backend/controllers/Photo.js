@@ -1,35 +1,9 @@
-const { Photo, Comment } = require('../models');
-const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-const jwt = require('jsonwebtoken');
+const photoHelper = require('../helpers/photoHelper');
 
 exports.uploadPhotoAndCreateEntry = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(' ')[1]; // Assuming "Bearer" is part of the token value
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decodedToken.userId;
-
-    const photoCount = await Photo.count({ where: { userId } });
-
-    if (photoCount >= 10) {
-      return res.status(400).json({ error: 'You have reached the maximum limit of 10 photos.' });
-    }
-
-    upload.single('photo')(req, res, async function (err) {
-      if (err) {
-        return res.status(400).json({ error: 'File upload failed.' });
-      }
-
-      const imageData = req.file.buffer;
-
-      const photo = await Photo.create({
-        userId,
-        imageData,
-      });
-
-      res.status(201).json({ message: 'Photo uploaded and entry created successfully', photo });
-    });
+    const resultUpload = await photoHelper.uploadPhotoAndCreateEntry(req.headers.authorization.split(' ')[1], req);
+    res.status(201).json(resultUpload);
   } catch (error) {
     console.error('Error creating photo entry:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -38,21 +12,8 @@ exports.uploadPhotoAndCreateEntry = async (req, res) => {
 
 exports.getLastTenPhotos = async (req, res) => {
   try {
-    const photos = await Photo.findAll({
-      limit: 10,
-      order: [['createdAt', 'DESC']],
-    });
-
-    const photosWithBase64 = photos.map((photo) => {
-      const imageBuffer = photo.imageData; // imageData is binary data
-      const base64Image = imageBuffer.toString('base64');
-      return {
-        id: photo.id,
-        imageData: `data:image/jpeg;base64,${base64Image}`,
-      };
-    });
-
-    res.json(photosWithBase64);
+    const photos = await photoHelper.getLastTenPhotos();
+    res.json(photos);
   } catch (error) {
     console.error('Error fetching photos:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -62,35 +23,8 @@ exports.getLastTenPhotos = async (req, res) => {
 exports.getAllPictures = async (req, res) => {
   try {
     const { page } = req.query;
-    const itemsPerPage = 10;
-    const offset = (page - 1) * itemsPerPage;
-
-    const { count, rows } = await Photo.findAndCountAll({
-      offset,
-      limit: itemsPerPage,
-      order: [['createdAt', 'DESC']],
-      include: [{ model: Comment }],
-    });
-
-    const totalPages = Math.ceil(count / itemsPerPage);
-
-    const photosWithBase64AndComments = rows.map((photo) => {
-      const imageBuffer = photo.imageData;
-      const base64Image = imageBuffer.toString('base64');
-      return {
-        id: photo.id,
-        imageData: `data:image/jpeg;base64,${base64Image}`,
-        comments: photo.Comments.map((comment) => ({
-          id: comment.id,
-          text: comment.text,
-        })),
-      };
-    });
-
-    res.status(200).json({
-      pictures: photosWithBase64AndComments,
-      totalPages,
-    });
+    const photos = await photoHelper.getAllPictures(page);
+    res.json(photos);
   } catch (error) {
     console.error('Error fetching pictures:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -99,23 +33,7 @@ exports.getAllPictures = async (req, res) => {
 
 exports.deletePhoto = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decodedToken.userId;
-    const photoId = req.params.photoId;
-
-    const photo = await Photo.findOne({ where: { id: photoId } });
-
-    if (!photo) {
-      return res.status(404).json({ error: 'Photo not found' });
-    }
-
-    if (photo.userId !== userId) {
-      return res.status(403).json({ error: 'You do not have permission to delete this photo' });
-    }
-
-    await photo.destroy();
-
+    await photoHelper.deletePhoto(req.headers.authorization.split(' ')[1], req.params.photoId);
     res.status(204).send();
   } catch (error) {
     console.error('Error deleting photo:', error);
@@ -125,24 +43,7 @@ exports.deletePhoto = async (req, res) => {
 
 exports.submitComment = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decodedToken.userId;
-    const photoId = req.params.photoId;
-    const commentText = req.body.commentText;
-
-    const photo = await Photo.findOne({ where: { id: photoId } });
-
-    if (!photo) {
-      return res.status(404).json({ error: 'Photo not found' });
-    }
-
-    const comment = await Comment.create({
-      userId,
-      photoId,
-      text: commentText,
-    });
-
+    const comment = await photoHelper.submitComment(req.headers.authorization.split(' ')[1], req.params.photoId, req.body.commentText);
     res.status(201).json({ message: 'Comment submitted successfully', comment });
   } catch (error) {
     console.error('Error submitting comment:', error);
@@ -150,17 +51,9 @@ exports.submitComment = async (req, res) => {
   }
 };
 
-
 exports.getCommentsByPhotoIds = async (req, res) => {
   try {
-    const { photoIds } = req.query;
-    const photoIdsArray = photoIds.split(',');
-
-    const comments = await Comment.findAll({
-      where: { photoId: photoIdsArray },
-      include: Photo,
-    });
-
+    const comments = await photoHelper.getCommentsByPhotoIds(req.query.photoIds);
     res.status(200).json(comments);
   } catch (error) {
     console.error('Error fetching comments:', error);

@@ -29,6 +29,14 @@
     background-color: #28775f;
   }
 
+  .no-comments {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+    background-color: #972828;
+  }
+
   .pagination {
     display: flex;
     justify-content: center;
